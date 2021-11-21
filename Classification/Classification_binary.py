@@ -19,7 +19,7 @@ minst = fetch_openml('mnist_784', version=1)
 minst.keys()
 
 # %%
-# assing data and labels
+# data and labels
 X, y = minst["data"], minst["target"]
 
 print("Data: ", X.shape)
@@ -47,7 +47,6 @@ y = y.astype(np.uint8)
 #* Spliting the data set into training and testing
 #! This should be always done before examening the data!
 # NOTE: Here shuffling of the data, and represation of all the needed data in training set is already pre done and prepared in this data set 
-
 X_train, X_test, y_train, y_test = X[:60000], X[60000:], y[:60000], y[60000:]
 
 # %%
@@ -61,6 +60,7 @@ y_test_5 = (y_test == 5)
 # %%
 #* Training a model - using Stochastic Gradient Descent
 from sklearn.linear_model import SGDClassifier
+
 
 # model
 sgd_clf = SGDClassifier(random_state=42) # if we want reproductive results we need to set a 'random_state' parameter
@@ -80,10 +80,10 @@ sgd_clf.predict(one_image_digits_pred)
 from sklearn.model_selection import StratifiedKFold
 from sklearn.base import clone
 
+
 skfolds = StratifiedKFold(n_splits=3, shuffle=True, random_state=42)
 
 for train_index, test_index in skfolds.split(X_train, y_train_5):
-    
     clone_clf = clone(sgd_clf) # cloning the classification ML model
     # spliting the data into selected folds
     X_train_folds = X_train.iloc[train_index]
@@ -103,6 +103,7 @@ for train_index, test_index in skfolds.split(X_train, y_train_5):
 # cross validation by using the function from sklearn
 from sklearn.model_selection import cross_val_score
 
+
 cross_val_score(sgd_clf, X_train, y_train_5, cv=3, scoring="accuracy")
 
 # %%
@@ -110,12 +111,14 @@ cross_val_score(sgd_clf, X_train, y_train_5, cv=3, scoring="accuracy")
 
 from sklearn.base import BaseEstimator
 
+
 class Never5Classifier(BaseEstimator):
     def fit(self, X, y = None):
         pass
     def predict(self, X):
         return np.zeros((len(X), 1), dtype=bool)
 
+    
 never_5_clf = Never5Classifier()
 
 cross_val_score(never_5_clf, X_train, y_train_5, cv=3, scoring="accuracy")
@@ -125,11 +128,13 @@ cross_val_score(never_5_clf, X_train, y_train_5, cv=3, scoring="accuracy")
 
 from sklearn.model_selection import cross_val_predict # importing function that outputs the predictions during cross validation
 
+
 # runing cross validation predictions
 y_train_pred = cross_val_predict(sgd_clf, X_train, y_train_5, cv = 3)
 
 # %%
 from sklearn.metrics import confusion_matrix # importing function for calculating confusion matrix
+
 
 confusion_matrix(y_train_5, y_train_pred)
 
@@ -137,13 +142,14 @@ confusion_matrix(y_train_5, y_train_pred)
 #* Precision and Recall
 from sklearn.metrics import precision_score, recall_score
 
-print("Precision score: ", precision_score(y_train_5, y_train_pred))
 
+print("Precision score: ", precision_score(y_train_5, y_train_pred))
 print("Recall: ", recall_score(y_train_5, y_train_pred))
 
 # %%
 # both precision score and recall are combined in F1 score
 from sklearn.metrics import f1_score
+
 
 print("F1 score: ", f1_score(y_train_5, y_train_pred))
 
@@ -173,6 +179,7 @@ y_scores = cross_val_predict(sgd_clf, X_train, y_train_5, cv=3, method="decision
 # compute precision, recall for all the thresholds
 from sklearn.metrics import precision_recall_curve
 
+
 precisions, recall, threshold = precision_recall_curve(y_train_5, y_scores)
 
 # %%
@@ -180,12 +187,14 @@ precisions, recall, threshold = precision_recall_curve(y_train_5, y_scores)
 def plot_precision_recall_vs_threshold(precisions, recall, threshold):
     plt.plot(threshold, precisions[:-1], "b--", label="Precision")
     plt.plot(threshold, recall[:-1], "g-", label="Recall")
+    
     #[...] # highlight the threshold, add the legend, axis label and grid
     plt.grid(True)
     plt.xlabel('Threshold')
     plt.ylabel('')
     plt.legend()
 
+    
 plot_precision_recall_vs_threshold(precisions, recall, threshold)
 plt.show()
 
@@ -215,6 +224,7 @@ recall_score(y_train_5, y_train_pred_90)
 # ploting the ROC curve
 from sklearn.metrics import roc_curve
 
+
 fpr, tpr, threshold = roc_curve(y_train_5, y_scores)
 
 # %%
@@ -226,6 +236,7 @@ def plot_roc_curve(fpr, tpr, label=None):
     plt.xlabel("FPR")
     plt.ylabel("TPR")
 
+    
 plot_roc_curve(fpr, tpr)
 plt.show()
 
@@ -238,6 +249,7 @@ roc_auc_score(y_train_5, y_scores)
 # %%
 #* Using Random Forest Classifier
 from sklearn.ensemble import RandomForestClassifier
+
 
 forest_clf = RandomForestClassifier(random_state=42)
 y_probas_forest = cross_val_predict(forest_clf, X_train, y_train_5, cv=3, method="predict_proba")
