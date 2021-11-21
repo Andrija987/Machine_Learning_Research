@@ -1,6 +1,6 @@
-# Data sets
+# Datasets
 
-Data sets can be found here:
+Datasets can be found here:
 
 [Boston housing](https://www.kaggle.com/kyasar/boston-housing)
 
