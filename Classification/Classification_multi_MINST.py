@@ -192,6 +192,8 @@ def plot_digits(instances, images_per_row=10, **options):
     # Now that we have a big image, we just need to show it:
     plt.imshow(big_image, cmap = mpl.cm.binary, **options)
     plt.axis("off")
+
+
 #%%
 # Ploting the selected images
 cl_a, cl_b = 3, 5
@@ -212,6 +214,7 @@ plt.show()
 # realizes multiple classification categories (not only one)
 
 from sklearn.neighbors import KNeighborsClassifier # supports multilabel classification
+
 
 # creating multiple classes
 y_train_large = (y_train >= 7) # creating a data set with numbers larger then 7
@@ -264,6 +267,7 @@ def plot_image(X_train_mod, image_num):
     plt.imshow(one_image, cmap=mpl.cm.binary, interpolation="nearest")
     plt.axis("off")
     plt.show()
+
 # %%
 plot_image(X_test_mod, 3)
 
